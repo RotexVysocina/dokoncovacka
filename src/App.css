@@ -1,0 +1,15 @@
+
+input{
+    height: 40pt;
+    width: 100%;
+    font-size: 20px;
+}
+
+body {
+    /* color:aquamarine */
+    background-color: aqua;
+}
+
+.datalist-items div {
+    height: 35px;
+}
