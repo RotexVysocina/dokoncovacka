@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {GoogleSpreadsheet} from 'google-spreadsheet';
 import creds from "./rotex-339222-9848006a37ef.json";
-// import './App.css';
+import { Container, Alert} from 'react-bootstrap';
+import './App.css';
 
 import DataListCode from "./DataListCode";
 import DataListSizeType from "./DataListSizeType";
@@ -89,10 +90,10 @@ function App() {
 
 
   return (
-    <div>
-      {sheetError && <p>Sheet ERROR: {sheetError}</p>}
-      {/*<p>Sheet title: {sheetTitle}</p>*/}
-      <h1>Dokončovačka</h1>
+    <Container className="p-3 mb-4">
+      {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
+
+      <h1 className="text-center">Dokončovačka</h1>
 
       <DataListCode listValues={listValuesCode} onSelect={onSelectCode} placeholder="Kód"/>
       <DataListSizeType listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
@@ -108,7 +109,10 @@ function App() {
 
       <AddToSheet code={valueCode} order={"Ord"} size={valueSize} type={valueType} pairs={valuePairs} date={"Dat"} place={"Plac"} person={"Per"}/>
 
-    </div>
+      <div className="position-absolute bottom-0 end-0">
+        <p>By KA | v1.0</p>
+      </div>
+    </Container>
   );
 }
 

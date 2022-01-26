@@ -1,4 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const InterpolateHtmlPlugin = require("interpolate-html-plugin");
 const path = require("path");
 const webpack = require("webpack");
 
@@ -22,11 +23,11 @@ module.exports = {
         use: "babel-loader",
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: [
           "style-loader", //3. Inject styles into DOM
           "css-loader", //2. Turns css into commonjs
-          "sass-loader", //1. Turns sass into css
+          // "sass-loader", //1. Turns sass into css
         ],
       },
       // {
@@ -34,23 +35,40 @@ module.exports = {
       //   use: {
       //     loader: "file-loader",
       //   },
-      {
-        test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
-        exclude: /node_modules/,
-        use: ['file-loader?name=[name].[ext]'] // ?name=[name].[ext] is only necessary to preserve the original file name
-      },
+      // {
+      //   test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+      //   exclude: /node_modules/,
+      //   use: ['file-loader?name=[name].[ext]'] // ?name=[name].[ext] is only necessary to preserve the original file name
+      // },
+      // {
+      //   test: /\.(png|svg|jpg|gif|jpe?g)$/,
+      //   use: [
+      //     {
+      //       options: {
+      //         name: "[name].[ext]",
+      //         outputPath: "images/"
+      //       },
+      //       loader: "file-loader"
+      //     }
+      //   ]
+      // }
     ],
   },
   plugins: [
     new HtmlWebPackPlugin({
+      inject: true,
       template: path.join(__dirname, "public/index.html"),
-      favicon: path.join(__dirname, './public/favicon.ico'),
+      // favicon: path.join(__dirname, './public/favicon.ico'),
       filename: "./index.html",
+
     }),
     new webpack.ProvidePlugin({
       process: "process/browser",
       Buffer: ["buffer", "Buffer"],
     }),
+    new InterpolateHtmlPlugin({
+      PUBLIC_URL: '' // can modify `static` to another name or get it from `process`
+    })
     // new webpack.DefinePlugin({
     //     // 'process.env.ASD': "KubaNKHHKJHN**8",
     //     "process.env.REACT_APP_SPREADSHEET_ID" : "1uKW5SZgF9l5eSNJ5pL4BxVv8Y4G0pIZ_vu2pwhJYTmQ",

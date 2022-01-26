@@ -1,4 +1,6 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
+import { Container, Button, Alert } from 'react-bootstrap';
+
 import {GoogleSpreadsheet} from 'google-spreadsheet';
 import creds from "./rotex-339222-9848006a37ef.json";
 
@@ -15,7 +17,8 @@ const AddToSheet = ({ code = "",
 
   const doc = new GoogleSpreadsheet(creds.sheet_id);
 
-  const [isAdded, setIsAdded] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+
   const gSheetInit = async () => {
     try {
       await doc.useServiceAccountAuth(creds);
@@ -26,23 +29,28 @@ const AddToSheet = ({ code = "",
   };
 
   const addDbRow = async (row) => {
+    setAlertVisible(true)
+    setTimeout(() => {
+      setAlertVisible(false)
+    }, 3000);
+
     await gSheetInit()
     let db = doc.sheetsByTitle["db"];
-    const added = db.addRow({
+    const newRow = {
       "ID": "x",
-      "Kod": code,
-      "Zakazka": order,
-      "Velikost": size,
-      "Provedeni": type,
-      "Pary": pairs,
-      "Datum": date,
-      "Umisteni": place,
-      "Kdo zadal": person,
-    })
-    // setCatRows(rows);
+        "Kod": code,
+        "Zakazka": order,
+        "Velikost": size,
+        "Provedeni": type,
+        "Pary": pairs,
+        "Datum": date,
+        "Umisteni": place,
+        "Kdo zadal": person,
+    }
+
+    const added = db.addRow(newRow);
     console.log("Added:")
     console.log(added);
-    setIsAdded(true);
   }
 
   const reload = () => {
@@ -50,10 +58,16 @@ const AddToSheet = ({ code = "",
   }
 
   return (
-    <div>
-      <button onClick={addDbRow}>Přidat</button> 
-      <button onClick={reload}>Vyčistit</button>
-      {isAdded && <p>Přidáno</p>}
+    <div className="text-center">
+      <Button size="lg" variant="success" onClick={addDbRow}>Přidat</Button>
+      {' '}
+      <Button size="lg" variant="danger" onClick={reload}>Vyčistit</Button>
+
+      <Container className="p-3 mb-3">
+        <Alert color="info" show={alertVisible} >
+          Přidáno
+        </Alert>
+      </Container>
     </div>
   );
 };
