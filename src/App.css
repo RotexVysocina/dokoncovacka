@@ -12,3 +12,7 @@ body {
 .datalist-items div {
     height: 35px;
 }
+
+.dropdown-menu {
+    font-size: 20px;
+}

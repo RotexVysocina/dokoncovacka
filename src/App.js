@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {GoogleSpreadsheet} from 'google-spreadsheet';
-import creds from "./rotex-339222-9848006a37ef.json";
 import { Container, Alert} from 'react-bootstrap';
-import './App.css';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import creds from "./rotex-339222-9848006a37ef.json";
 
 import DataListCode from "./DataListCode";
 import DataListSizeType from "./DataListSizeType";
 import DataListPairs from "./DataListPairs";
 import AddToSheet from "./AddToSheet";
+import InputSizeExample from "./TestTypeaHead";
+
+import './App.css';
 
 function App() {
   const doc = new GoogleSpreadsheet(creds.sheet_id);
@@ -88,6 +91,8 @@ function App() {
     setValuePairs(valuePairs);
   }, []);
 
+  const [clear, setClear] = useState(false);
+  const [codeDef, setCodeDef] = useState([]);
 
   return (
     <Container className="p-3 mb-4">
@@ -95,6 +100,7 @@ function App() {
 
       <h1 className="text-center">Dokončovačka</h1>
 
+      <InputSizeExample listValues={listValuesCode} clear={clear} defaultSelected={codeDef}/>
       <DataListCode listValues={listValuesCode} onSelect={onSelectCode} placeholder="Kód"/>
       <DataListSizeType listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
       <DataListSizeType listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} placeholder="Provedení" type="Provedeni-"/>
@@ -108,6 +114,14 @@ function App() {
       </div>
 
       <AddToSheet code={valueCode} order={"Ord"} size={valueSize} type={valueType} pairs={valuePairs} date={"Dat"} place={"Plac"} person={"Per"}/>
+
+      <button onClick={() => setClear(clear+1)}>
+        Clear
+      </button>
+
+      <button onClick={() => setCodeDef(codeDef+1)}>
+        Code Def
+      </button>
 
       <div className="position-absolute bottom-0 end-0">
         <p>By KA | v1.0</p>
