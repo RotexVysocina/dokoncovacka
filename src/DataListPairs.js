@@ -1,7 +1,7 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
 import DataListInput from "react-datalist-input";
 
-const DataListPairs = ({ listValues,  onSelect, onInput, placeholder }) => {
+const DataListPairs = ({ value, listValues,  onSelect, onInput, placeholder }) => {
   const items = useMemo(
       () =>
         listValues.map((oneItem, index) => ({
@@ -21,6 +21,7 @@ const DataListPairs = ({ listValues,  onSelect, onInput, placeholder }) => {
       onInput={onInput}
       // clearInputOnClick={true}
       debounceLoader="Načítám..."
+      value={value}
     />
   );
 };

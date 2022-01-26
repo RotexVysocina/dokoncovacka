@@ -1,7 +1,7 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
 import DataListInput from "react-datalist-input";
 
-const DataListSizeType = ({ listValues,  onSelect, onInput, placeholder, type }) => {
+const DataListSizeType = ({ value, listValues, onSelect, onInput, placeholder, type }) => {
   const items = useMemo(
       () => {
         let sizes = [];
@@ -26,6 +26,7 @@ const DataListSizeType = ({ listValues,  onSelect, onInput, placeholder, type })
       clearInputOnClick={true}
       debounceLoader="Načítám..."
       onInput={onInput}
+      value={value}
     />
   );
 };
