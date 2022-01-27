@@ -1,14 +1,19 @@
 
 input{
-    height: 30pt;
-    font-size: 20px;
+    height: 80px;
 }
 
 body {
     /* color:aquamarine */
     background-color: darkseagreen;
+    font-size: 40px;
 }
 
 .datalist-items div {
-    height: 35px;
+    height: 65px;
+}
+
+
+.dokoncovacka {
+    font-size: 30px;
 }

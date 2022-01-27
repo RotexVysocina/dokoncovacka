@@ -1,7 +1,7 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
-import DataListInput from "react-datalist-input";
+import DataListInput from "./DataListInput";
 
-const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, placeholder, clearInputOnClick=false }) => {
+const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, placeholder, clearInputOnClick=false, type="text"}) => {
   const items = useMemo(
     () => {
       let elements = [];
@@ -27,6 +27,7 @@ const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, pl
       clearInputOnClick={clearInputOnClick}
       debounceLoader="Načítám..."
       value={value}
+      type={type}
     />
   );
 };

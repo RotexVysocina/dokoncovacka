@@ -183,12 +183,13 @@ function App() {
     setValueType("");
     setValuePairs("");
     setValuePerson("");
+    setValuePlace(sheetValues[0]["Umisteni"])
     // setValueComment("");
   })
 
 
   return (
-    <Container className="pt-1">
+    <Container className="pt-1 dokoncovacka">
       {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
 
       <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} onInput={onInputCode} placeholder="Katalog" clearInputOnClick/>
@@ -197,7 +198,7 @@ function App() {
       <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
       <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} placeholder="Provedení" type="Provedeni-"/>
 
-      <DataListSheet value={valuePairs} sheetValues={sheetValues} sheetColumn="Pary" onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry" clearInputOnClick/>
+      <DataListSheet value={valuePairs} sheetValues={sheetValues} sheetColumn="Pary" onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry" clearInputOnClick type="number"/>
       <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Kdo zadal" clearInputOnClick/>
       <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umisteni" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění" clearInputOnClick/>
 

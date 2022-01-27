@@ -54,6 +54,7 @@ const AddToSheet = ({ onClear,
   }
 
   return (
+
     <div className="text-center pt-1">
       {alertVisible && <Container className="p-1">
         <Alert color="info" show="true" >
@@ -61,9 +62,17 @@ const AddToSheet = ({ onClear,
         </Alert>
       </Container>}
 
-      <Button size="lg" variant="success" onClick={addDbRow}>Přidat</Button>
+      <style type="text/css">
+      {`  
+      .btn-xxl {
+        padding: 1rem 2rem;
+        font-size: 1.8rem;
+      }
+      `}
+      </style>
+      <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
       {' '}
-      <Button size="lg" variant="danger" onClick={onClear}>Vyčistit</Button>
+      <Button size="xxl" variant="danger" onClick={onClear}>Vyčistit</Button>
 
 
     </div>
