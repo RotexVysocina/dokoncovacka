@@ -1,51 +1,92 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {GoogleSpreadsheet} from 'google-spreadsheet';
 import creds from "./rotex-339222-9848006a37ef.json";
-import { Container, Alert} from 'react-bootstrap';
-import './App.css';
 
+import { Container, Alert} from 'react-bootstrap';
 import DataListCode from "./DataListCode";
 import DataListSizeType from "./DataListSizeType";
-import DataListPairs from "./DataListPairs";
-import DataListTest from "./DataListTest";
+import DataListSheet from "./DataListSheet";
 import AddToSheet from "./AddToSheet";
+
+import './App.css';
 
 function App() {
   const doc = new GoogleSpreadsheet(creds.sheet_id);
 
-  const [sheetTitle, setSheetTitle] = useState("");
+  const [sheetValues, setSheetValues] = useState([]);
   const [sheetError, setSheetError] = useState();
+
+  const [valueCatalog, setValueCatalog] = useState("");
   const [listValuesCode, setListValuesCode] = useState([]);
   const [valueCode, setValueCode] = useState("");
   const [listValuesSize, setListValuesSize] = useState([]);
   const [valueSize, setValueSize] = useState("");
   const [listValuesType, setListValuesType] = useState([]);
   const [valueType, setValueType] = useState("");
-  const [listValuesPairs, setListValuesPairs] = useState([1, 5, 7]);
   const [valuePairs, setValuePairs] = useState("");
+  const [valuePerson, setValuePerson] = useState("");
+  const [valuePlace, setValuePlace] = useState();
+  // const [valueDate, setValueDate] = useState(moment().format("D.M.YYYY"));
+  // const [valueComment, setValueComment] = useState("");
 
   const gSheetInit = async () => {
     try {
       await doc.useServiceAccountAuth(creds);
       await doc.loadInfo();
-      setSheetTitle(doc.title);
     } catch (e) {
       console.error('Error: ', e);
       setSheetError(e.message);
     }
   };
 
-  const getCatalogRows = async () => {
-    let cat = doc.sheetsByTitle["Katalog"];
-    const rows = await cat.getRows()
-    // setCatRows(rows);
-    return rows;
+  const getSheetByName = async (sheetName) => {
+    let sheet = doc.sheetsByTitle[sheetName];
+    return await sheet.getRows()
   }
+
+  // const loadAllCatalogs = async () => {
+  //   let catalogs = {};
+  //
+  //   for(const catalog of sheetValues) {
+  //     console.log(catalog);
+  //     try {
+  //       const catalogName = catalog["Katalogy"];
+  //       if(catalogName) {
+  //         let cat = await getSheetByName(catalogName);
+  //         console.log(cat);
+  //         catalogs[catalogName] = cat;
+  //         // catalogs[catalogName] = await getSheetByName(catalogName);
+  //       }
+  //     } catch (e) {}
+  //
+  //   }
+  //   console.log(catalogs);
+  //   // setListValuesCode([catalogs]);
+  //
+  // }
 
   useEffect(async () => {
     await gSheetInit()
-    setListValuesCode(await getCatalogRows());
+    setSheetValues(await getSheetByName("nastaveni"));
   }, [])
+
+  useEffect(() => {
+    // console.log(sheetValues);
+    try {
+      setValuePlace(sheetValues[0]["Umisteni"])
+    } catch (e) {}
+  }, [sheetValues])
+
+  /////////////////// Select CATALOG
+  const onSelectCatalog = useCallback(async (selectedCatalog) => {
+    setListValuesCode([]) // clear all code select list
+    setValueCode("")
+    setValueSize("");
+    setValueType("");
+    console.log("Catalog:", selectedCatalog);
+    setValueCatalog(selectedCatalog.label);
+    setListValuesCode(await getSheetByName(selectedCatalog.label));
+  }, []);
 
 
   // Select CODE
@@ -57,9 +98,10 @@ function App() {
     setListValuesType(selectedCode);
     setValueCode(selectedCode.label);
   }, []);
-  // const onInputCode = useCallback((valueCode) => {
-  //   setValueCode(valueCode);
-  // }, []);
+
+  const onInputCode = useCallback((valueCode) => {
+    setValueCode(valueCode);
+  }, []);
 
   /////////////////// Select SIZE
   const onSelectSize = useCallback((selectedSize) => {
@@ -93,39 +135,87 @@ function App() {
     setValuePairs(valuePairs);
   }, []);
 
+  /////////////////// Select PERSON
+  const onSelectPerson = useCallback((selectedPerson) => {
+    console.log("Person:", selectedPerson);
+    setValuePerson(selectedPerson.label);
+  }, []);
+
+  const onInputPerson = useCallback((valuePerson) => {
+    setValuePerson(valuePerson);
+  }, []);
+
+  /////////////////// Select PLACE
+  const onSelectPlace = useCallback((selectedPlace) => {
+    console.log("Place:", selectedPlace);
+    setValuePlace(selectedPlace.label);
+  }, []);
+
+  const onInputPlace = useCallback((valuePlace) => {
+    setValuePlace(valuePlace);
+  }, []);
+
+  // /////////////////// Select DATE
+  // const onSelectDate = useCallback((selectedDate) => {
+  //   console.log("Date:", selectedDate);
+  //   setValueDate(selectedDate.label);
+  // }, []);
+  //
+  // const onInputDate = useCallback((valueDate) => {
+  //   setValueDate(valueDate);
+  // }, []);
+  //
+  // /////////////////// Select COMMENT
+  // const onSelectComment = useCallback((selectedComment) => {
+  //   console.log("Comment:", selectedComment);
+  //   setValueComment(selectedComment.label);
+  // }, []);
+  //
+  // const onInputComment = useCallback((valueComment) => {
+  //   setValueComment(valueComment);
+  // }, []);
+
+  // Clear input
   const clearInput = useCallback(() => {
+    setValueCatalog("")
     setValueCode("");
     setValueSize("");
     setValueType("");
     setValuePairs("");
+    setValuePerson("");
+    // setValueComment("");
   })
 
 
   return (
-    <Container className="p-3 mb-4">
+    <Container className="pt-1">
       {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
 
-      <h1 className="text-center">Dokončovačka</h1>
-
-      <DataListCode value={valueCode} listValues={listValuesCode} onSelect={onSelectCode} placeholder="Kód"/>
+      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} onInput={onInputCode} placeholder="Katalog" clearInputOnClick/>
+      <DataListCode value={valueCode} listValues={listValuesCode} catalogName={valueCatalog} onSelect={onSelectCode} placeholder="Kód"/>
+      {/*{isOrder && <DataListPairs value={valueOrder} listValues={listValuesOrder} onSelect={onSelectOrder} onInput={onInputOrder} placeholder="Zakázka"/>}*/}
       <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
       <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} placeholder="Provedení" type="Provedeni-"/>
-      <DataListPairs value={valuePairs} listValues={listValuesPairs} onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry"/>
-      {/*<DataListTest value={5} listValues={ [1, 5, 9, 44]} onSelect={onSelectPairs} onInput={onInputPairs} placeholder="PáryXX"/>*/}
 
-      <div>
-        Kód: {valueCode} |
-        Velikost: {valueSize} |
-        Provedení: {valueType} |
-        Páry: {valuePairs} |
-      </div>
+      <DataListSheet value={valuePairs} sheetValues={sheetValues} sheetColumn="Pary" onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry" clearInputOnClick/>
+      <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Kdo zadal" clearInputOnClick/>
+      <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umisteni" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění" clearInputOnClick/>
 
-      <AddToSheet code={valueCode} order={"Ord"} size={valueSize} type={valueType} pairs={valuePairs} date={"Dat"} place={"Plac"} person={"Per"}/>
-      <button onClick={clearInput}>Cisti</button>
+      {/*<DataListSheet value={valueComment} sheetValues={sheetValues} sheetColumn="Komentar" onSelect={onSelectComment} onInput={onInputComment} placeholder="Komentář"/>*/}
+      {/*<DataListSheet value={valueDate} sheetValues={[]} sheetColumn="Disable" onSelect={onSelectDate} onInput={onInputDate} placeholder="Datum"/>*/}
 
-      <div className="position-absolute bottom-0 end-0">
-        <p>By KA | v1.0</p>
-      </div>
+      {/*<div>*/}
+      {/*  Katalog: {valueCatalog} |*/}
+      {/*  Kód: {valueCode} |*/}
+      {/*  Velikost: {valueSize} |*/}
+      {/*  Provedení: {valueType} |*/}
+      {/*  Páry: {valuePairs} |*/}
+      {/*  Zadal: {valuePerson} |*/}
+      {/*  Umístění: {valuePlace}*/}
+      {/*</div>*/}
+
+      <AddToSheet onClear={clearInput} catalog={valueCatalog} code={valueCode} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
+
     </Container>
   );
 }

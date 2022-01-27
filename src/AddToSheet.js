@@ -1,18 +1,18 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
 import { Container, Button, Alert } from 'react-bootstrap';
+import moment from "moment";
 
 import {GoogleSpreadsheet} from 'google-spreadsheet';
 import creds from "./rotex-339222-9848006a37ef.json";
 
-const AddToSheet = ({ code = "",
-                      order = "",
-                      size= "",
-                      type = "",
-                      pairs = "",
-                      date = "",
-                      place = "",
-                      person = "",
-                      // isAdded = false,
+const AddToSheet = ({ onClear,
+                      catalog,
+                      code,
+                      size,
+                      type,
+                      pairs,
+                      place,
+                      person,
                     }) => {
 
   const doc = new GoogleSpreadsheet(creds.sheet_id);
@@ -32,42 +32,40 @@ const AddToSheet = ({ code = "",
     setAlertVisible(true)
     setTimeout(() => {
       setAlertVisible(false)
-    }, 3000);
+    }, 1500);
 
     await gSheetInit()
     let db = doc.sheetsByTitle["db"];
     const newRow = {
-      "ID": "x",
-        "Kod": code,
-        "Zakazka": order,
+        "Katalog": catalog,
+        "Klic": code,
         "Velikost": size,
         "Provedeni": type,
         "Pary": pairs,
-        "Datum": date,
-        "Umisteni": place,
         "Kdo zadal": person,
+        "Umisteni": place,
+        "Datum": moment().format("D.M.YYYY HH:mm:ss"),
     }
 
     const added = db.addRow(newRow);
     console.log("Added:")
     console.log(added);
-  }
-
-  const reload = () => {
-    window.location.reload();
+    onClear();
   }
 
   return (
-    <div className="text-center">
-      <Button size="lg" variant="success" onClick={addDbRow}>Přidat</Button>
-      {' '}
-      <Button size="lg" variant="danger" onClick={reload}>Vyčistit</Button>
-
-      <Container className="p-3 mb-3">
-        <Alert color="info" show={alertVisible} >
+    <div className="text-center pt-1">
+      {alertVisible && <Container className="p-1">
+        <Alert color="info" show="true" >
           Přidáno
         </Alert>
-      </Container>
+      </Container>}
+
+      <Button size="lg" variant="success" onClick={addDbRow}>Přidat</Button>
+      {' '}
+      <Button size="lg" variant="danger" onClick={onClear}>Vyčistit</Button>
+
+
     </div>
   );
 };
