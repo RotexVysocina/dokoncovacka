@@ -9,6 +9,10 @@ body {
     font-size: 40px;
 }
 
+.input-pair {
+    width: 100%;
+}
+
 .datalist-items div {
     height: 65px;
 }

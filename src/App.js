@@ -8,6 +8,9 @@ import DataListSizeType from "./DataListSizeType";
 import DataListSheet from "./DataListSheet";
 import AddToSheet from "./AddToSheet";
 
+import Numpad from 'react-doge-numpad'
+import 'react-doge-numpad/dist/index.css'
+
 import './App.css';
 
 function App() {
@@ -187,10 +190,13 @@ function App() {
     // setValueComment("");
   })
 
+  const [value, setValue] = useState("");
 
   return (
     <Container className="pt-1 dokoncovacka">
       {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
+
+
 
       <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} onInput={onInputCode} placeholder="Katalog" clearInputOnClick/>
       <DataListCode value={valueCode} listValues={listValuesCode} catalogName={valueCatalog} onSelect={onSelectCode} placeholder="Kód"/>
@@ -198,9 +204,14 @@ function App() {
       <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
       <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} placeholder="Provedení" type="Provedeni-"/>
 
-      <DataListSheet value={valuePairs} sheetValues={sheetValues} sheetColumn="Pary" onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry" clearInputOnClick type="number"/>
+      <Numpad label="Páry" value={0} decimal={false} max={1000000000000} min={0} onChange={onInputPairs}>
+        <input type="number" value={valuePairs} style={{width: "100%"}} placeholder="Páry"/>
+      </Numpad>
+      {/*<DataListSheet value={valuePairs} sheetValues={sheetValues} sheetColumn="Pary" onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry" clearInputOnClick type="number"/>*/}
       <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Kdo zadal" clearInputOnClick/>
       <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umisteni" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění" clearInputOnClick/>
+
+
 
       {/*<DataListSheet value={valueComment} sheetValues={sheetValues} sheetColumn="Komentar" onSelect={onSelectComment} onInput={onInputComment} placeholder="Komentář"/>*/}
       {/*<DataListSheet value={valueDate} sheetValues={[]} sheetColumn="Disable" onSelect={onSelectDate} onInput={onInputDate} placeholder="Datum"/>*/}
