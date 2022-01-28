@@ -198,7 +198,7 @@ function App() {
 
 
 
-      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} onInput={onInputCode} placeholder="Katalog" clearInputOnClick/>
+      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} placeholder="Katalog" clearInputOnClick/>
       <DataListCode value={valueCode} listValues={listValuesCode} catalogName={valueCatalog} onSelect={onSelectCode} placeholder="Kód"/>
       {/*{isOrder && <DataListPairs value={valueOrder} listValues={listValuesOrder} onSelect={onSelectOrder} onInput={onInputOrder} placeholder="Zakázka"/>}*/}
       <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
