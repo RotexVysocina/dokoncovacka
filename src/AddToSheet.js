@@ -18,6 +18,8 @@ const AddToSheet = ({ onClear,
   const doc = new GoogleSpreadsheet(creds.sheet_id);
 
   const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
 
   const gSheetInit = async () => {
     try {
@@ -29,24 +31,36 @@ const AddToSheet = ({ onClear,
   };
 
   const addDbRow = async (row) => {
-    setAlertVisible(true)
-    setTimeout(() => {
-      setAlertVisible(false)
-    }, 1500);
 
     await gSheetInit()
     let db = doc.sheetsByTitle["db"];
     const newRow = {
         "Katalog": catalog,
-        "Klic": code,
+        "Klíč": code,
         "Velikost": size,
-        "Provedeni": type,
-        "Pary": pairs,
+        "Provedení": type,
+        "Páry": pairs,
         "Kdo zadal": person,
-        "Umisteni": place,
+        "Umístění": place,
         "Datum": moment().format("D.M.YYYY HH:mm:ss"),
     }
 
+    setAlertVisible(true)
+    setTimeout(() => {
+      setAlertVisible(false)
+    }, 2000);
+
+    for(const [key, val] of Object.entries(newRow)) {
+      if(!val) {
+        console.log(key, val);
+        setAlertMessage("Naní vyplněná hodnota: " + key);
+        setAlertType("danger")
+        return;
+      }
+    }
+
+    setAlertType("success")
+    setAlertMessage("Přidáno")
     const added = db.addRow(newRow);
     console.log("Added:")
     console.log(added);
@@ -55,12 +69,10 @@ const AddToSheet = ({ onClear,
 
   return (
 
-    <div className="text-center pt-1">
-      {alertVisible && <Container className="p-1">
-        <Alert color="info" show="true" >
-          Přidáno
-        </Alert>
-      </Container>}
+    <div className="text-center pt-3">
+      {alertVisible && <Alert variant={alertType} show="true" >
+        {alertMessage}
+      </Alert>}
 
       <style type="text/css">
       {`  

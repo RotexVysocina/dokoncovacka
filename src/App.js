@@ -9,9 +9,6 @@ import DataListSheet from "./DataListSheet";
 import AddToSheet from "./AddToSheet";
 
 import Numpad from 'react-doge-numpad'
-import 'react-doge-numpad/dist/index.css'
-
-import './App.css';
 
 function App() {
   const doc = new GoogleSpreadsheet(creds.sheet_id);
@@ -43,8 +40,14 @@ function App() {
   };
 
   const getSheetByName = async (sheetName) => {
-    let sheet = doc.sheetsByTitle[sheetName];
-    return await sheet.getRows()
+    let sheet;
+    try {
+      sheet = doc.sheetsByTitle[sheetName];
+      return await sheet.getRows()
+    } catch (e) {
+        setSheetError(`List s názavm ${sheetName} neexistuje`);
+        return [];
+    }
   }
 
   // const loadAllCatalogs = async () => {
@@ -76,7 +79,7 @@ function App() {
   useEffect(() => {
     // console.log(sheetValues);
     try {
-      setValuePlace(sheetValues[0]["Umisteni"])
+      setValuePlace(sheetValues[0]["Umístění"])
     } catch (e) {}
   }, [sheetValues])
 
@@ -186,48 +189,48 @@ function App() {
     setValueType("");
     setValuePairs("");
     setValuePerson("");
-    setValuePlace(sheetValues[0]["Umisteni"])
+    setListValuesCode([]);
+    setListValuesSize([]);
+    setListValuesType([]);
+    setValuePlace(sheetValues[0]["Umístění"])
     // setValueComment("");
   })
 
   const [value, setValue] = useState("");
 
   return (
-    <Container className="pt-1 dokoncovacka">
-      {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
+    <Container className="pt-3 dokoncovacka">
+      {/*<form>*/}
+        {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
 
+        <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} placeholder="Katalog" clearInputOnClick/>
+        <DataListCode value={valueCode} listValues={listValuesCode} catalogName={valueCatalog} onSelect={onSelectCode} onInput={onInputCode} placeholder="Klíč"/>
+        <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
+        <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} placeholder="Provedení" type="Provedeni-"/>
 
+        <Numpad label="Páry" value={0} decimal={false} max={1000000000000} min={0} onChange={onInputPairs}>
+          <input type="number" value={valuePairs} style={{width: "100%"}} placeholder="Páry"/>
+        </Numpad>
+        {/*<DataListSheet value={valuePairs} sheetValues={sheetValues} sheetColumn="Pary" onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry" clearInputOnClick type="number"/>*/}
+        <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Kdo zadal" clearInputOnClick/>
+        <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umístění" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění" clearInputOnClick/>
 
-      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} placeholder="Katalog" clearInputOnClick/>
-      <DataListCode value={valueCode} listValues={listValuesCode} catalogName={valueCatalog} onSelect={onSelectCode} placeholder="Kód"/>
-      {/*{isOrder && <DataListPairs value={valueOrder} listValues={listValuesOrder} onSelect={onSelectOrder} onInput={onInputOrder} placeholder="Zakázka"/>}*/}
-      <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
-      <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} placeholder="Provedení" type="Provedeni-"/>
+        {/*<DataListSheet value={valueComment} sheetValues={sheetValues} sheetColumn="Komentar" onSelect={onSelectComment} onInput={onInputComment} placeholder="Komentář"/>*/}
+        {/*<DataListSheet value={valueDate} sheetValues={[]} sheetColumn="Disable" onSelect={onSelectDate} onInput={onInputDate} placeholder="Datum"/>*/}
 
-      <Numpad label="Páry" value={0} decimal={false} max={1000000000000} min={0} onChange={onInputPairs}>
-        <input type="number" value={valuePairs} style={{width: "100%"}} placeholder="Páry"/>
-      </Numpad>
-      {/*<DataListSheet value={valuePairs} sheetValues={sheetValues} sheetColumn="Pary" onSelect={onSelectPairs} onInput={onInputPairs} placeholder="Páry" clearInputOnClick type="number"/>*/}
-      <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Kdo zadal" clearInputOnClick/>
-      <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umisteni" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění" clearInputOnClick/>
+        {/*<div>*/}
+        {/*  Katalog: {valueCatalog} |*/}
+        {/*  Kód: {valueCode} |*/}
+        {/*  Velikost: {valueSize} |*/}
+        {/*  Provedení: {valueType} |*/}
+        {/*  Páry: {valuePairs} |*/}
+        {/*  Zadal: {valuePerson} |*/}
+        {/*  Umístění: {valuePlace}*/}
+        {/*</div>*/}
 
+        <AddToSheet onClear={clearInput} catalog={valueCatalog} code={valueCode} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
 
-
-      {/*<DataListSheet value={valueComment} sheetValues={sheetValues} sheetColumn="Komentar" onSelect={onSelectComment} onInput={onInputComment} placeholder="Komentář"/>*/}
-      {/*<DataListSheet value={valueDate} sheetValues={[]} sheetColumn="Disable" onSelect={onSelectDate} onInput={onInputDate} placeholder="Datum"/>*/}
-
-      {/*<div>*/}
-      {/*  Katalog: {valueCatalog} |*/}
-      {/*  Kód: {valueCode} |*/}
-      {/*  Velikost: {valueSize} |*/}
-      {/*  Provedení: {valueType} |*/}
-      {/*  Páry: {valuePairs} |*/}
-      {/*  Zadal: {valuePerson} |*/}
-      {/*  Umístění: {valuePlace}*/}
-      {/*</div>*/}
-
-      <AddToSheet onClear={clearInput} catalog={valueCatalog} code={valueCode} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
-
+      {/*</form>*/}
     </Container>
   );
 }

@@ -28,6 +28,7 @@ const DataListSizeType = ({ value, listValues, onSelect, onInput, placeholder, t
       debounceLoader="Načítám..."
       onInput={onInput}
       value={value}
+      suppressReselect={false}
     />
   );
 };

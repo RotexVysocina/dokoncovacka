@@ -33,8 +33,6 @@ import PropTypes from 'prop-types';
 
 import useStateRef from './useStateRef';
 
-import './DataListInput.css';
-
 /**
  * default function for matching the current input value (needle)
  * and the values of the items array

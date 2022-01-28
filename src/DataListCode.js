@@ -23,6 +23,7 @@ const DataListCode = ({ value, listValues,  onSelect, onInput, placeholder }) =>
       clearInputOnClick={true}
       debounceLoader="Načítám..."
       value={value}
+      suppressReselect={false}
     />
   );
 };

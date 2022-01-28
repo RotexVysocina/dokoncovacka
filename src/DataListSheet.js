@@ -28,6 +28,7 @@ const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, pl
       debounceLoader="Načítám..."
       value={value}
       type={type}
+      suppressReselect={false}
     />
   );
 };
