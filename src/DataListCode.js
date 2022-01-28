@@ -6,7 +6,7 @@ const DataListCode = ({ value, listValues,  onSelect, onInput, placeholder }) =>
   const items = useMemo(
       () =>
         listValues.map((oneItem, index) => ({
-          label: oneItem["Kod"],
+          label: oneItem["Klic"],
           key: index,
           ...oneItem, // keep everything
         })),

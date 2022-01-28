@@ -50,36 +50,18 @@ function App() {
     }
   }
 
-  // const loadAllCatalogs = async () => {
-  //   let catalogs = {};
   //
-  //   for(const catalog of sheetValues) {
-  //     console.log(catalog);
-  //     try {
-  //       const catalogName = catalog["Katalogy"];
-  //       if(catalogName) {
-  //         let cat = await getSheetByName(catalogName);
-  //         console.log(cat);
-  //         catalogs[catalogName] = cat;
-  //         // catalogs[catalogName] = await getSheetByName(catalogName);
-  //       }
-  //     } catch (e) {}
-  //
-  //   }
-  //   console.log(catalogs);
-  //   // setListValuesCode([catalogs]);
-  //
-  // }
-
   useEffect(async () => {
+
     await gSheetInit()
     setSheetValues(await getSheetByName("nastaveni"));
+    // let db = await getSheetByName("db");
   }, [])
 
+  // Set default values
   useEffect(() => {
-    // console.log(sheetValues);
     try {
-      setValuePlace(sheetValues[0]["Umístění"])
+      setValuePlace(sheetValues[0]["Umístění"]) // While value is exist set place to first row
     } catch (e) {}
   }, [sheetValues])
 
@@ -132,10 +114,10 @@ function App() {
   }, []);
 
   /////////////////// Select PAIRS
-  const onSelectPairs = useCallback((selectedPairs) => {
-    console.log("Páry:", selectedPairs);
-    setValuePairs(selectedPairs.label);
-  }, []);
+  // const onSelectPairs = useCallback((selectedPairs) => {
+  //   console.log("Páry:", selectedPairs);
+  //   setValuePairs(selectedPairs.label);
+  // }, []);
 
   const onInputPairs = useCallback((valuePairs) => {
     setValuePairs(valuePairs);
@@ -196,8 +178,6 @@ function App() {
     // setValueComment("");
   })
 
-  const [value, setValue] = useState("");
-
   return (
     <Container className="pt-3 dokoncovacka">
       {/*<form>*/}
@@ -215,18 +195,17 @@ function App() {
         <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Kdo zadal" clearInputOnClick/>
         <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umístění" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění" clearInputOnClick/>
 
-        {/*<DataListSheet value={valueComment} sheetValues={sheetValues} sheetColumn="Komentar" onSelect={onSelectComment} onInput={onInputComment} placeholder="Komentář"/>*/}
-        {/*<DataListSheet value={valueDate} sheetValues={[]} sheetColumn="Disable" onSelect={onSelectDate} onInput={onInputDate} placeholder="Datum"/>*/}
-
-        {/*<div>*/}
-        {/*  Katalog: {valueCatalog} |*/}
-        {/*  Kód: {valueCode} |*/}
-        {/*  Velikost: {valueSize} |*/}
-        {/*  Provedení: {valueType} |*/}
-        {/*  Páry: {valuePairs} |*/}
-        {/*  Zadal: {valuePerson} |*/}
-        {/*  Umístění: {valuePlace}*/}
-        {/*</div>*/}
+        {/*<DataListSheet value={valueComment} sheetValues={sheetValues} sheetColumn="Komentar" onSelect={onSelectComment} onInput={onInputComment} placeholder="Komentář"/>
+        <DataListSheet value={valueDate} sheetValues={[]} sheetColumn="Disable" onSelect={onSelectDate} onInput={onInputDate} placeholder="Datum"/>*/}
+        {/*<div>
+          Katalog: {valueCatalog} |
+          Kód: {valueCode} |
+          Velikost: {valueSize} |
+          Provedení: {valueType} |
+          Páry: {valuePairs} |
+          Zadal: {valuePerson} |
+          Umístění: {valuePlace}
+        </div>*/}
 
         <AddToSheet onClear={clearInput} catalog={valueCatalog} code={valueCode} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
 
