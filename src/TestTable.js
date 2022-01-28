@@ -60,7 +60,7 @@ function TestTable() {
       <MUIDataTable
         columns={columns}
         data={dbValues}
-        title='Books Directory'
+        title='Dokončovačka DB'
         options={options}
       />
     </div>

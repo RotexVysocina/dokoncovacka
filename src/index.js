@@ -5,11 +5,14 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-doge-numpad/dist/index.css'
 import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>,
-    <App/>,
+  <BrowserRouter>
+    <App/>
+  </BrowserRouter>,
 
   document.getElementById('root')
 );

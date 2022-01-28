@@ -1,34 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // import {BrowserRouter, Routes, Route, Link, Redirect } from "react-router-dom";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Link, Routes, Navigate
-} from "react-router-dom";
+import {BrowserRouter, Switch, Route, Link, Routes, Navigate, useNavigate} from "react-router-dom";
 import DokoForm from "./DokoForm";
 import DokoTable from "./DokoTable";
 import TestTable from "./TestTable";
+import { Fab, Action } from 'react-tiny-fab';
+import 'react-tiny-fab/dist/styles.css';
 
 function App() {
 
-  return (
-    <BrowserRouter>
-      <div className="App">
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Formular</Link>
-            </li>
-            <li>
-              <Link to="/data">Data</Link>
-            </li>
-            <li>
-              <Link to="/table">Tabulka</Link>
-            </li>
-          </ul>
-        </nav>
+  const navigate = useNavigate();
 
+  return (
+    <>
+      <div className="App">
         <Routes>
           <Route path="/" element={<DokoForm/>}/>
           <Route path="/data" element={<DokoTable/>}/>
@@ -38,8 +23,20 @@ function App() {
             element={<Navigate to="/" />}
           />
         </Routes>
+
+        <Fab alwaysShowTitle={true} icon="ℹ️">
+          <Action text="Domů" onClick={() => navigate("/")}>
+            🏠
+          </Action>
+          <Action text="Data" onClick={() => navigate("/data")}>
+            📊
+          </Action>
+          <Action text="Tabulka" onClick={() => navigate("/table")}>
+            📈
+          </Action>
+        </Fab>
       </div>
-    </BrowserRouter>
+    </>
 
   );
 }
