@@ -1,7 +1,7 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
 import DataListInput from "./DataListInput";
 
-const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, placeholder, clearInputOnClick=false, type="text"}) => {
+const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, placeholder, clearInputOnClick=true, type="text"}) => {
   const items = useMemo(
     () => {
       let elements = [];
@@ -9,7 +9,8 @@ const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, pl
         if(row[sheetColumn]) {
           elements.push({
             label: String(row[sheetColumn]),
-            key: String(row[sheetColumn])
+            key: String(row[sheetColumn]),
+            ...row,
           });
         }
       }
