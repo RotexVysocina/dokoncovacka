@@ -4,7 +4,6 @@ import React, {useState} from "react";
 import { Route, Routes, Navigate, useNavigate} from "react-router-dom";
 
 
-
 function FloatingAppMenu() {
 
   const navigate = useNavigate();
@@ -24,7 +23,6 @@ function FloatingAppMenu() {
         direction={Directions.Up}
         spacing={8}
         isOpen={isOpen}
-        class
       >
         <MainButton
           iconResting={<List color="royalblue" size={menuSize.bigIcon} />}

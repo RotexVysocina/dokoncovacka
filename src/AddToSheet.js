@@ -8,6 +8,7 @@ import creds from "./rotex-339222-9848006a37ef.json";
 const AddToSheet = ({ onClear,
                       catalog,
                       code,
+                      code1,
                       size,
                       type,
                       pairs,
@@ -36,7 +37,8 @@ const AddToSheet = ({ onClear,
     let db = doc.sheetsByTitle["db"];
     const newRow = {
         "Katalog": catalog,
-        "Klíč": code,
+        "Kód1": code1,
+        "Kód": code,
         "Velikost": size,
         "Provedení": type,
         "Páry": pairs,

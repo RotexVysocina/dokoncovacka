@@ -18,6 +18,7 @@ function DokoForm() {
   const [valueCatalog, setValueCatalog] = useState("");
   const [listValuesCode, setListValuesCode] = useState([]);
   const [valueCode, setValueCode] = useState("");
+  const [valueCode1, setValueCode1] = useState("");
   const [listValuesSize, setListValuesSize] = useState([]);
   const [valueSize, setValueSize] = useState("");
   const [listValuesType, setListValuesType] = useState([]);
@@ -31,7 +32,7 @@ function DokoForm() {
       await doc.useServiceAccountAuth(creds);
       await doc.loadInfo();
     } catch (e) {
-      console.error('Error: ', e);
+      console.error('Error LoadDocInfo: ', e);
       setSheetError(e.message);
     }
   };
@@ -42,6 +43,7 @@ function DokoForm() {
       sheet = doc.sheetsByTitle[sheetName];
       return await sheet.getRows()
     } catch (e) {
+        console.log(e.message);
         setSheetError(`List s názavm ${sheetName} neexistuje / nelze načíst`);
         return [];
     }
@@ -50,7 +52,7 @@ function DokoForm() {
   //
   useEffect(async () => {
     await gSheetInit()
-    setSheetValues(await getSheetByName("nastaveni"));
+    setSheetValues(await getSheetByName("Nastavení"));
     // let db = await getSheetByName("db");
   }, [])
 
@@ -60,13 +62,6 @@ function DokoForm() {
       setValuePlace(sheetValues[0]["Umístění"]) // While value is exist set place to first row
     } catch (e) {}
   }, [sheetValues])
-
-  // Set default values
-  useEffect(() => {
-    try {
-      console.log(listValuesCode)
-    } catch (e) {}
-  }, [listValuesCode])
 
   /////////////////// Select CATALOG
   const onSelectCatalog = useCallback(async (selectedCatalog) => {
@@ -88,10 +83,12 @@ function DokoForm() {
     setListValuesSize(selectedCode);
     setListValuesType(selectedCode);
     setValueCode(selectedCode.label);
+    setValueCode1(selectedCode["Kód1"])
   }, []);
 
   const onInputCode = useCallback((valueCode) => {
     setValueCode(valueCode);
+    setValueCode1(valueCode);
   }, []);
 
   /////////////////// Select SIZE
@@ -160,29 +157,30 @@ function DokoForm() {
     <Container className="pt-3 dokoncovacka">
       {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
 
-      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} placeholder="Katalog"/>
-      <DataListSheet value={valueCode} sheetValues={listValuesCode} sheetColumn="Klic" onSelect={onSelectCode} onInput={onInputCode} placeholder="Klíč"/>
-      <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} placeholder="Velikost" type="Velikost-"/>
-      <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} placeholder="Provedení" type="Provedeni-"/>
+      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} placeholder="Firma"/>
+      <DataListSheet value={valueCode} sheetValues={listValuesCode} sheetColumn="Kód" onSelect={onSelectCode} onInput={onInputCode} placeholder="Kód"/>
+      <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} type="Velikost-" placeholder="Velikost" />
+      <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} type="Provedení-" placeholder="Barva"/>
 
       <Numpad label="Páry" value={0} decimal={false} max={1000000000000} min={0} onChange={onInputPairs}>
         <input type="number" value={valuePairs} style={{width: "100%"}} placeholder="Páry"/>
       </Numpad>
 
-      <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Kdo zadal"/>
+      <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Zaměstnanec"/>
       <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umístění" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění"/>
 
-      {/*<div>
-        Katalog: {valueCatalog} |
-        Kód: {valueCode} |
-        Velikost: {valueSize} |
-        Provedení: {valueType} |
-        Páry: {valuePairs} |
-        Zadal: {valuePerson} |
-        Umístění: {valuePlace}
-      </div>*/}
+      {/*<div>*/}
+      {/*  Katalog: {valueCatalog} |*/}
+      {/*  Kód: {valueCode} |*/}
+      {/*  Kód1: {valueCode1} |*/}
+      {/*  Velikost: {valueSize} |*/}
+      {/*  Provedení: {valueType} |*/}
+      {/*  Páry: {valuePairs} |*/}
+      {/*  Zadal: {valuePerson} |*/}
+      {/*  Umístění: {valuePlace}*/}
+      {/*</div>*/}
 
-      <AddToSheet onClear={clearInput} catalog={valueCatalog} code={valueCode} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
+      <AddToSheet onClear={clearInput} catalog={valueCatalog} code={valueCode} code1={valueCode1} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
 
     </Container>
   );

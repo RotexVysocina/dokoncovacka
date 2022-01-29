@@ -5,7 +5,6 @@ import DokoForm from "./DokoForm";
 import DokoData from "./DokoData";
 import DokoTable from "./DokoTable";
 import FloatingAppMenu from "./FloatingAppMenu";
-import 'react-floating-button-menu/dist/index.css';
 
 function App() {
   return (
