@@ -33,14 +33,12 @@ function DokoTable() {
     }
   }
 
-  //
   useEffect(async () => {
     await gSheetInit()
     setDbValues(await getSheetByName("db"));
   }, [])
 
   const columns = ["Katalog", "Klíč", "Velikost", "Provedení", "Páry", "Kdo zadal", "Umístění",  "Datum"];
-
 
   const options = {
     // filterType: 'checkbox',
@@ -52,7 +50,7 @@ function DokoTable() {
     <div style={{ maxWidth: '100%' }}>
       <MUIDataTable
         columns={columns}
-        data={dbValues}
+        data={dbValues.reverse()}
         title='Dokončovačka DB'
         options={options}
       />
