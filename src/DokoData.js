@@ -43,7 +43,7 @@ function DokoData() {
     // setDbValues(await gSheet.getSheetByName("db"));
   }, [])
 
-  const columns = ["Katalog", "Kód", "Velikost", "Provedení", "Páry", "Kdo zadal", "Umístění",  "Datum"];
+  const columns = ["Firma","Kód1","Velikost","Barva","Páry","Zaměstnanec","Umístění","Datum"]; // - "Kód",
 
   return (
     <Container className="pt-3">

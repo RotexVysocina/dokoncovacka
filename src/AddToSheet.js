@@ -1,11 +1,12 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
-import { Container, Button, Alert } from 'react-bootstrap';
+import { Container, Button, Alert, Modal } from 'react-bootstrap';
 import moment from "moment";
 
 import {GoogleSpreadsheet} from 'google-spreadsheet';
 import creds from "./rotex-339222-9848006a37ef.json";
 
 const AddToSheet = ({ onClear,
+                      onBack,
                       catalog,
                       code,
                       code1,
@@ -27,67 +28,105 @@ const AddToSheet = ({ onClear,
       await doc.useServiceAccountAuth(creds);
       await doc.loadInfo();
     } catch (e) {
-      console.error('Error: ', e);
+      console.error('Error LoadDocInfo: ', e);
+      showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
     }
   };
 
-  const addDbRow = async (row) => {
+  const getSheetByName = async (sheetName) => {
+    let sheet;
+    try {
+      sheet = doc.sheetsByTitle[sheetName];
+      return await sheet.getRows()
+    } catch (e) {
+      console.log(e.message);
+      showAlert("danger", `ERROR: List s názavm ${sheetName} neexistuje / nelze načíst`, false);
+      return [];
+    }
+  }
 
+  const showAlert = (type, message, time = 2000) => {
+    setAlertType(type);
+    setAlertMessage(message);
+    setAlertVisible(true);
+    if(time) {
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, time);
+    }
+  }
+
+  const addDbRow = async () => {
     await gSheetInit()
-    let db = doc.sheetsByTitle["db"];
+    let dbAdd = doc.sheetsByTitle["db"];
     const newRow = {
-        "Katalog": catalog,
-        "Kód1": code1,
+        "Firma": catalog,
         "Kód": code,
         "Velikost": size,
-        "Provedení": type,
+        "Barva": type,
         "Páry": pairs,
-        "Kdo zadal": person,
+        "Zaměstnanec": person,
         "Umístění": place,
         "Datum": moment().format("D.M.YYYY HH:mm:ss"),
+        "Kód1": code1 ? code1: "-",
     }
-
-    setAlertVisible(true)
-    setTimeout(() => {
-      setAlertVisible(false)
-    }, 2000);
 
     for(const [key, val] of Object.entries(newRow)) {
       if(!val) {
         console.log(key, val);
-        setAlertMessage("Naní vyplněná hodnota: " + key);
-        setAlertType("danger")
+        showAlert("danger", "Naní vyplněno: " + key, 2500);
         return;
       }
     }
 
-    setAlertType("success")
-    setAlertMessage("Přidáno")
-    const added = db.addRow(newRow);
+    showAlert("success", "Přidáno");
+    let added;
+    try {
+      added = dbAdd.addRow(newRow);
+    } catch (e) {
+      showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
+    }
+
     console.log("Added:")
     console.log(added);
     onClear();
   }
 
+  const onBackClick = async (row) => {
+    await gSheetInit();
+    const dbRm = await getSheetByName("db");
+
+    showAlert("success", "Vráceno");
+    const len = dbRm.length;
+    console.log(dbRm[len-1]);
+    const dbRow = dbRm[len-1];
+
+    onBack(dbRow);
+
+    await dbRm[len-1].delete();
+  }
+
+
   return (
 
     <div className="text-center pt-3">
-      {alertVisible && <Alert variant={alertType} show="true" >
+      {alertVisible && <Alert variant={alertType} >
         {alertMessage}
       </Alert>}
 
       <style type="text/css">
       {`  
       .btn-xxl {
-        padding: 1rem 2rem;
+        padding: 0.9rem 1.2rem;
         font-size: 1.8rem;
       }
       `}
       </style>
-      <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
+      <Button size="xxl" variant="danger" onClick={onBackClick}>Zpět</Button>
       {' '}
-      <Button size="xxl" variant="danger" onClick={onClear}>Vyčistit</Button>
-
+      <Button size="xxl" variant="warning" onClick={onClear}>Vyčistit</Button>
+      {' '}
+      <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
 
     </div>
   );

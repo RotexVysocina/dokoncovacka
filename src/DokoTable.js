@@ -38,10 +38,9 @@ function DokoTable() {
     setDbValues(await getSheetByName("db"));
   }, [])
 
-  const columns = ["Katalog", "Klíč", "Velikost", "Provedení", "Páry", "Kdo zadal", "Umístění",  "Datum"];
+  const columns = ["Firma","Kód1","Velikost","Barva","Páry","Zaměstnanec","Umístění","Datum"]; // - "Kód",
 
   const options = {
-    // filterType: 'checkbox',
     selectableRows: 'none'
   };
 

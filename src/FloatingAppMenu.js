@@ -1,5 +1,5 @@
 import {ChildButton, Directions, FloatingMenu, MainButton} from "react-floating-button-menu";
-import {HouseFill, List, PieChartFill, Table} from "react-bootstrap-icons";
+import {HouseFill, List, PieChartFill, Table, ArrowClockwise, LayoutTextSidebarReverse} from "react-bootstrap-icons";
 import React, {useState} from "react";
 import { Route, Routes, Navigate, useNavigate} from "react-router-dom";
 
@@ -38,16 +38,22 @@ function FloatingAppMenu() {
           onClick={() => {navigate("/"); setIsOpen(false);}}
         />
         <ChildButton
-          icon={<Table color="royalblue" size={menuSize.smallIcon} />}
+          icon={<LayoutTextSidebarReverse color="royalblue" size={menuSize.smallIcon} />}
           background="white"
           size={menuSize.smallMenu}
           onClick={() => {navigate("/data"); setIsOpen(false);}}
         />
         <ChildButton
-          icon={<PieChartFill color="royalblue" size={menuSize.smallIcon} />}
+          icon={<Table color="royalblue" size={menuSize.smallIcon} />}
           background="white"
           size={menuSize.smallMenu}
           onClick={() => {navigate("/table"); setIsOpen(false);}}
+        />
+        <ChildButton
+          icon={<ArrowClockwise color="royalblue" size={menuSize.smallIcon} />}
+          background="white"
+          size={menuSize.smallMenu}
+          onClick={() => {window.location.reload(); setIsOpen(false);}}
         />
       </FloatingMenu>
     </div>

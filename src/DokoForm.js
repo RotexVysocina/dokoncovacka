@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {GoogleSpreadsheet} from 'google-spreadsheet';
 import creds from "./rotex-339222-9848006a37ef.json";
 
-import { Container, Alert} from 'react-bootstrap';
+import {Container, Alert, Button} from 'react-bootstrap';
 import DataListSizeType from "./DataListSizeType";
 import DataListSheet from "./DataListSheet";
 import AddToSheet from "./AddToSheet";
@@ -33,7 +33,7 @@ function DokoForm() {
       await doc.loadInfo();
     } catch (e) {
       console.error('Error LoadDocInfo: ', e);
-      setSheetError(e.message);
+      setSheetError("Problém tabulkou - asi nejede interner :-(");
     }
   };
 
@@ -76,7 +76,7 @@ function DokoForm() {
 
 
   // Select CODE
-  const onSelectCode = useCallback((selectedCode) => {
+  const onSelectCode = useCallback( (selectedCode) => {
     setValueSize("");
     setValueType("");
     console.log("Kod:", selectedCode);
@@ -142,6 +142,7 @@ function DokoForm() {
   const clearInput = useCallback(() => {
     setValueCatalog("")
     setValueCode("");
+    setValueCode1("");
     setValueSize("");
     setValueType("");
     setValuePairs("");
@@ -149,15 +150,41 @@ function DokoForm() {
     setListValuesCode([]);
     setListValuesSize([]);
     setListValuesType([]);
-    setValuePlace(sheetValues[0]["Umístění"])
+    // setValuePlace(sheetValues[0]["Umístění"])
+    try {
+      setValuePlace(sheetValues[0]["Umístění"]) // While value is exist set place to first row
+    } catch (e) {
+      console.log(e);
+    }
     setSheetError("")
   })
+
+  // Return input
+  const onBack = useCallback(async (row) => {
+    onSelectCatalog({label: row["Firma"]});
+    // setValueCode1(row["Kód1"]);
+    // setValueCode(row["Kód"]);
+    // size and type is not working
+    setValuePairs(row["Páry"]);
+    setValuePerson(row["Zaměstnanec"]);
+    setValuePlace(row["Umístění"]);
+    // setListValuesSize();
+    // setListValuesType();
+    setSheetError("")
+  })
+
+
+  // const onBack = async () => {
+  //   const db = await getSheetByName("db");
+  //
+  //   console.log(db);
+  // }
 
   return (
     <Container className="pt-3 dokoncovacka">
       {sheetError && <Alert variant="danger">ERROR: {sheetError}</Alert>}
 
-      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Katalogy" onSelect={onSelectCatalog} placeholder="Firma"/>
+      <DataListSheet value={valueCatalog} sheetValues={sheetValues} sheetColumn="Firma" onSelect={onSelectCatalog} placeholder="Firma"/>
       <DataListSheet value={valueCode} sheetValues={listValuesCode} sheetColumn="Kód" onSelect={onSelectCode} onInput={onInputCode} placeholder="Kód"/>
       <DataListSizeType value={valueSize} listValues={listValuesSize} onSelect={onSelectSize} onInput={onInputSize} type="Velikost-" placeholder="Velikost" />
       <DataListSizeType value={valueType} listValues={listValuesType} onSelect={onSelectType} onInput={onInputType} type="Provedení-" placeholder="Barva"/>
@@ -166,7 +193,7 @@ function DokoForm() {
         <input type="number" value={valuePairs} style={{width: "100%"}} placeholder="Páry"/>
       </Numpad>
 
-      <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Kdo zadal" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Zaměstnanec"/>
+      <DataListSheet value={valuePerson} sheetValues={sheetValues} sheetColumn="Zaměstnanec" onSelect={onSelectPerson} onInput={onInputPerson} placeholder="Zaměstnanec"/>
       <DataListSheet value={valuePlace} sheetValues={sheetValues} sheetColumn="Umístění" onSelect={onSelectPlace} onInput={onInputPlace} placeholder="Umístění"/>
 
       {/*<div>*/}
@@ -180,7 +207,8 @@ function DokoForm() {
       {/*  Umístění: {valuePlace}*/}
       {/*</div>*/}
 
-      <AddToSheet onClear={clearInput} catalog={valueCatalog} code={valueCode} code1={valueCode1} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
+      <AddToSheet onClear={clearInput} onBack={onBack} catalog={valueCatalog} code={valueCode} code1={valueCode1} size={valueSize} type={valueType} pairs={valuePairs} person={valuePerson} place={valuePlace} />
+
 
     </Container>
   );
