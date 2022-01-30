@@ -33,6 +33,7 @@
     "react-floating-button-menu": "^2.1.1",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-tiny-fab": "^4.0.4",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tls": "0.0.1",
