@@ -24,6 +24,9 @@ function FloatingAppMenu() {
         spacing={8}
         isOpen={isOpen}
       >
+        {
+
+        }
         <MainButton
           iconResting={<List color="royalblue" size={menuSize.bigIcon} />}
           iconActive={<List color="royalblue" size={menuSize.bigIcon} />}

@@ -4,6 +4,7 @@ import moment from "moment";
 
 import {GoogleSpreadsheet} from 'google-spreadsheet';
 import creds from "./rotex-339222-9848006a37ef.json";
+import ModalDialog from "./ModalDialog";
 
 const AddToSheet = ({ onClear,
                       onBack,
@@ -22,6 +23,7 @@ const AddToSheet = ({ onClear,
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
+  const [modalShow, setModalShow] = useState(false);
 
   const gSheetInit = async () => {
     try {
@@ -57,8 +59,6 @@ const AddToSheet = ({ onClear,
   }
 
   const addDbRow = async () => {
-    await gSheetInit()
-    let dbAdd = doc.sheetsByTitle["db"];
     const newRow = {
         "Firma": catalog,
         "Kód": code,
@@ -82,6 +82,8 @@ const AddToSheet = ({ onClear,
     showAlert("success", "Přidáno");
     let added;
     try {
+      await gSheetInit()
+      let dbAdd = doc.sheetsByTitle["db"];
       added = dbAdd.addRow(newRow);
     } catch (e) {
       showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
@@ -92,7 +94,7 @@ const AddToSheet = ({ onClear,
     onClear();
   }
 
-  const onBackClick = async (row) => {
+  const revertLastRow = async () => {
     await gSheetInit();
     const dbRm = await getSheetByName("db");
 
@@ -106,6 +108,14 @@ const AddToSheet = ({ onClear,
     await dbRm[len-1].delete();
   }
 
+  const onBackClick = async (row) => {
+    setModalShow(true);
+  }
+
+  const modalAccept = async () => {
+    setModalShow(false);
+    await revertLastRow();
+  }
 
   return (
 
@@ -127,7 +137,7 @@ const AddToSheet = ({ onClear,
       <Button size="xxl" variant="warning" onClick={onClear}>Vyčistit</Button>
       {' '}
       <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
-
+      <ModalDialog show={modalShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalShow(false)} handleAccept={modalAccept}/>
     </div>
   );
 };
