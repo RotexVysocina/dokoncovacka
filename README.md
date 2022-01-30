@@ -2,6 +2,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Setup Google Sheets
+ [https://dev.to/calvinpak/how-to-read-write-google-sheets-with-react-193l]()
+
 ## Available Scripts
 
 In the project directory, you can run:

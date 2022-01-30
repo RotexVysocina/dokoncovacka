@@ -3,7 +3,7 @@ import { Container, Button, Alert, Modal } from 'react-bootstrap';
 import moment from "moment";
 
 import {GoogleSpreadsheet} from 'google-spreadsheet';
-import creds from "./rotex-339222-9848006a37ef.json";
+import creds from "./rotex-339816-80d534ff0b05.json";
 import ModalDialog from "./ModalDialog";
 
 const AddToSheet = ({ onClear,
@@ -127,7 +127,7 @@ const AddToSheet = ({ onClear,
       <style type="text/css">
       {`  
       .btn-xxl {
-        padding: 0.9rem 1.2rem;
+        padding: 0.9rem 1rem;
         font-size: 1.8rem;
       }
       `}
