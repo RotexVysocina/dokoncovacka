@@ -2,7 +2,7 @@ import {ChildButton, Directions, FloatingMenu, MainButton} from "react-floating-
 import {HouseFill, List, PieChartFill, Table, ArrowClockwise, LayoutTextSidebarReverse} from "react-bootstrap-icons";
 import React, {useState} from "react";
 import { Route, Routes, Navigate, useNavigate} from "react-router-dom";
-
+import creds from "./rotex-339816-80d534ff0b05.json";
 
 function FloatingAppMenu() {
 
@@ -55,7 +55,13 @@ function FloatingAppMenu() {
           size={menuSize.smallMenu}
           onClick={() => {window.location.reload(); setIsOpen(false);}}
         />
-      </FloatingMenu>
+        <ChildButton
+              icon={<p style={{color: "royalblue"}}>v{creds.version}</p>}
+              background="white"
+              size={menuSize.smallMenu}
+              // onClick={() => {window.location.reload(); setIsOpen(false);}}
+              />
+            </FloatingMenu>
     </div>
   );
 }

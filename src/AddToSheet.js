@@ -23,7 +23,8 @@ const AddToSheet = ({ onClear,
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
-  const [modalShow, setModalShow] = useState(false);
+  const [modalRevShow, setModalRevShow] = useState(false);
+  const [modalAddShow, setModalAddShow] = useState(false);
 
   const gSheetInit = async () => {
     try {
@@ -71,6 +72,7 @@ const AddToSheet = ({ onClear,
         "Kód1": code1 ? code1: "-",
     }
 
+    // check if not empty
     for(const [key, val] of Object.entries(newRow)) {
       if(!val) {
         console.log(key, val);
@@ -78,17 +80,25 @@ const AddToSheet = ({ onClear,
         return;
       }
     }
-
-    showAlert("success", "Přidáno");
     let added;
+    let dbAdd
     try {
       await gSheetInit()
-      let dbAdd = doc.sheetsByTitle["db"];
+      dbAdd = doc.sheetsByTitle["db"];
+      added = dbAdd.addRow(newRow);
+    } catch (e) {
+      showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(==`, false);
+      return;
+    }
+
+    try {
       added = dbAdd.addRow(newRow);
     } catch (e) {
       showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
+      return;
     }
 
+    showAlert("success", "Přidáno");
     console.log("Added:")
     console.log(added);
     onClear();
@@ -109,12 +119,17 @@ const AddToSheet = ({ onClear,
   }
 
   const onBackClick = async (row) => {
-    setModalShow(true);
+    setModalRevShow(true);
   }
 
   const modalAccept = async () => {
-    setModalShow(false);
-    await revertLastRow();
+    setModalRevShow(false);
+    try {
+      await revertLastRow();
+    } catch (e) {
+      showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
+    }
+
   }
 
   return (
@@ -137,7 +152,8 @@ const AddToSheet = ({ onClear,
       <Button size="xxl" variant="warning" onClick={onClear}>Vyčistit</Button>
       {' '}
       <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
-      <ModalDialog show={modalShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalShow(false)} handleAccept={modalAccept}/>
+      <ModalDialog show={modalRevShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalRevShow(false)} handleAccept={modalAccept}/>
+      {/*<ModalDialog show={modalAddShow} modalHeading="Zpět" modalContent="Přidíáno" handleClose={() => setModalAddShow(false)} handleAccept={modalAccept}/>*/}
     </div>
   );
 };
