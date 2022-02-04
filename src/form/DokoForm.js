@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {GoogleSpreadsheet} from 'google-spreadsheet';
-import creds from "./rotex-339816-80d534ff0b05.json";
+import creds from "../cred/rotex-339816-80d534ff0b05.json";
 
 import {Container, Alert, Button} from 'react-bootstrap';
-import DataListSizeType from "./DataListSizeType";
-import DataListSheet from "./DataListSheet";
+import DataListSizeType from "./DataList/DataListSizeType";
+import DataListSheet from "./DataList/DataListSheet";
 import AddToSheet from "./AddToSheet";
 
 import Numpad from 'react-doge-numpad'
@@ -174,11 +174,6 @@ function DokoForm() {
   })
 
 
-  // const onBack = async () => {
-  //   const db = await getSheetByName("db");
-  //
-  //   console.log(db);
-  // }
 
   return (
     <Container className="pt-3 dokoncovacka">

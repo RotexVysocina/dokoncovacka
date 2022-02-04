@@ -1,5 +1,5 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
-import DataListInput from "./DataListInput";
+import DataListInput from "../../DataListInput/DataListInput";
 
 const DataListSheet = ({ value, sheetValues, sheetColumn,  onSelect, onInput, placeholder, clearInputOnClick=true, type="text"}) => {
   const items = useMemo(

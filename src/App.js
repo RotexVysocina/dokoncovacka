@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Route, Routes, Navigate, useNavigate, Outlet} from "react-router-dom";
-import DokoForm from "./DokoForm";
-import DokoData from "./DokoData";
-import DokoTable from "./DokoTable";
-import FloatingAppMenu from "./FloatingAppMenu";
-import TestLocks from "./TestLock";
+import DokoForm from "./form/DokoForm";
+import DokoData from "./data/DokoData";
+import DokoTable from "./table/DokoTable";
+import FloatingAppMenu from "./menu/FloatingAppMenu";
+import PatternPageLock from "./utils/PatternPageLock";
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
   
   return (
     <>
-      {!successLogin ? <TestLocks successLogin={successLogin} onSuccessLogin={onSuccessLogin}/> :
+      {!successLogin ? <PatternPageLock successLogin={successLogin} onSuccessLogin={onSuccessLogin}/> :
         <div className="App">
           <Routes>
             <Route path="/" element={<DokoForm/>}/>
@@ -32,7 +32,6 @@ function App() {
         </div>
       }
     </>
-
   );
 }
 

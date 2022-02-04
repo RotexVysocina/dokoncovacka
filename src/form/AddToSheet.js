@@ -3,8 +3,8 @@ import { Container, Button, Alert, Modal } from 'react-bootstrap';
 import moment from "moment";
 
 import {GoogleSpreadsheet} from 'google-spreadsheet';
-import creds from "./rotex-339816-80d534ff0b05.json";
-import ModalDialog from "./ModalDialog";
+import creds from "../cred/rotex-339816-80d534ff0b05.json";
+import ModalDialog from "../utils/ModalDialog";
 
 const AddToSheet = ({ onClear,
                       onBack,
