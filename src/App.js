@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Route, Routes, Navigate, useNavigate, Outlet} from "react-router-dom";
+import { Route, Routes, Navigate, useParams, Outlet} from "react-router-dom";
 import DokoForm from "./form/DokoForm";
 import DokoData from "./data/DokoData";
 import DokoTable from "./table/DokoTable";
@@ -14,6 +14,7 @@ function App() {
     localStorage.setItem("RotexSecureKey", "true");
     setsSuccessLogin(true);
   }
+
   
   return (
     <>

@@ -59,9 +59,9 @@ function FloatingAppMenu() {
               icon={<p style={{color: "royalblue"}}>v{creds.version}</p>}
               background="white"
               size={menuSize.smallMenu}
-              // onClick={() => {window.location.reload(); setIsOpen(false);}}
+              onClick={() => {window.location.href = "https://sev.rotexvysocina.cz"; setIsOpen(false);}}
               />
-            </FloatingMenu>
+    </FloatingMenu>
     </div>
   );
 }
