@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import MUIDataTable from "mui-datatables";
 import {GoogleSpreadsheet} from 'google-spreadsheet';
-import creds from "./rotex-339816-80d534ff0b05.json";
+import creds from "../cred/rotex-339816-80d534ff0b05.json";
 
 import { Container, Alert, Table} from 'react-bootstrap';
 

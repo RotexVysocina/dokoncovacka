@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import {GoogleSpreadsheet} from 'google-spreadsheet';
-import creds from "./rotex-339816-80d534ff0b05.json";
+import creds from "../cred/rotex-339816-80d534ff0b05.json";
 
-import GSheet from "./GSheetConnector";
+import GSheet from "../utils/GSheetConnector";
 import { Container, Alert, Table} from 'react-bootstrap';
 
 function DokoData() {

@@ -1,6 +1,6 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
 // import DataListInput from "react-datalist-input";
-import DataListInput from "./DataListInput";
+import DataListInput from "../../DataListInput/DataListInput";
 
 const DataListSizeType = ({ value, listValues, onSelect, onInput, placeholder, type }) => {
   const items = useMemo(
