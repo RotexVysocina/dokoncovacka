@@ -79,6 +79,7 @@ const DataListInput = ({
   onSelect,
   onClick,
   placeholder,
+  name,
   type,
   requiredInputLength,
   suppressReselect,
@@ -239,6 +240,7 @@ const DataListInput = ({
    */
   const onHandleInput = useCallback(
     event => {
+      event.preventDefault();
       const { value: newValue } = event.target;
       debouncedMatchingUpdateStep(newValue);
       onInput(newValue);
@@ -454,6 +456,8 @@ const DataListInput = ({
         placeholder={placeholder}
         value={currentInput}
         aria-label="Search"
+        name={name}
+        autoComplete="off"
       />
       {dropDown}
     </div>
@@ -491,6 +495,7 @@ DataListInput.propTypes = {
 
 DataListInput.defaultProps = {
   placeholder: '',
+  name: '',
   type: 'text',
   match: undefined,
   inputClassName: '',

@@ -1,5 +1,6 @@
 import React, {useState, useMemo, useCallback, useEffect} from "react";
 import { Container, Button, Alert, Modal } from 'react-bootstrap';
+import ButtonClear from './buttons/ButtonClear'
 import moment from "moment";
 
 import {GoogleSpreadsheet} from 'google-spreadsheet';
@@ -8,14 +9,7 @@ import ModalDialog from "../utils/ModalDialog";
 
 const AddToSheet = ({ onClear,
                       onBack,
-                      catalog,
-                      code,
-                      code1,
-                      size,
-                      type,
-                      pairs,
-                      place,
-                      person,
+                      valuesArray,
                     }) => {
 
   const doc = new GoogleSpreadsheet(creds.sheet_id);
@@ -60,39 +54,28 @@ const AddToSheet = ({ onClear,
   }
 
   const addDbRow = async () => {
-    const newRow = {
-        "Firma": catalog,
-        "Kód": code,
-        "Velikost": size,
-        "Barva": type,
-        "Páry": pairs,
-        "Zaměstnanec": person,
-        "Umístění": place,
-        "Datum": moment().format("D.M.YYYY HH:mm:ss"),
-        "Kód1": code1 ? code1: "-",
-    }
-
     // check if not empty
-    for(const [key, val] of Object.entries(newRow)) {
+    for(const [key, val] of Object.entries(valuesArray)) {
       if(!val) {
         console.log(key, val);
         showAlert("danger", "Naní vyplněno: " + key, 2500);
         return;
       }
     }
+
     let added;
     let dbAdd
     try {
       await gSheetInit()
       dbAdd = doc.sheetsByTitle["db"];
-      added = dbAdd.addRow(newRow);
+      added = dbAdd.addRow(valuesArray);
     } catch (e) {
       showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(==`, false);
       return;
     }
 
     try {
-      added = dbAdd.addRow(newRow);
+      added = dbAdd.addRow(valuesArray);
     } catch (e) {
       showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
       return;
@@ -149,7 +132,7 @@ const AddToSheet = ({ onClear,
       </style>
       <Button size="xxl" variant="danger" onClick={onBackClick}>Zpět</Button>
       {' '}
-      <Button size="xxl" variant="warning" onClick={onClear}>Vyčistit</Button>
+      <ButtonClear onClickClear={onClear}/>
       {' '}
       <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
       <ModalDialog show={modalRevShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalRevShow(false)} handleAccept={modalAccept}/>
