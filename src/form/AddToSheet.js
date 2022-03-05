@@ -68,7 +68,9 @@ const AddToSheet = ({ onClear,
         "Páry": pairs,
         "Zaměstnanec": person,
         "Umístění": place,
-        "Datum": moment().format("D.M.YYYY HH:mm:ss"),
+        "Datum-čas": moment().format("D.M.YYYY HH:mm:ss"),
+        "Datum": moment().format("D.M.YYYY"),
+        "Čas": moment().format("HH:mm:ss"),
         "Kód1": code1 ? code1: "-",
     }
 

@@ -5,6 +5,7 @@ import DokoData from "./data/DokoData";
 import DokoTable from "./table/DokoTable";
 import FloatingAppMenu from "./menu/FloatingAppMenu";
 import PatternPageLock from "./utils/PatternPageLock";
+import Skinner from "./utils/Skinner";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
   
   return (
     <>
+      <Skinner/>
       {!successLogin ? <PatternPageLock successLogin={successLogin} onSuccessLogin={onSuccessLogin}/> :
         <div className="App">
           <Routes>
