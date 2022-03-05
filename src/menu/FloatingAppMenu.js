@@ -14,6 +14,8 @@ function FloatingAppMenu() {
     bigIcon: 45,
     smallMenu: 65,
     smallIcon: 35,
+    background: "#0cd94e",
+    color: "royalblue",
   }
 
   return(
@@ -25,42 +27,42 @@ function FloatingAppMenu() {
         isOpen={isOpen}
       >
         <MainButton
-          iconResting={<List color="royalblue" size={menuSize.bigIcon} />}
-          iconActive={<List color="royalblue" size={menuSize.bigIcon} />}
-          background="white"
+          iconResting={<List color={menuSize.color} size={menuSize.bigIcon} />}
+          iconActive={<List color={menuSize.color} size={menuSize.bigIcon} />}
+          background={menuSize.background}
           onClick={() => setIsOpen((prev) => !prev)}
           size={menuSize.bigMenu}
         />
         <ChildButton
-          icon={<HouseFill color="royalblue" size={menuSize.smallIcon} />}
-          background="white"
+          icon={<HouseFill color={menuSize.color} size={menuSize.smallIcon} />}
+          background={menuSize.background}
           size={menuSize.smallMenu}
           onClick={() => {navigate("/"); setIsOpen(false);}}
         />
         <ChildButton
-          icon={<LayoutTextSidebarReverse color="royalblue" size={menuSize.smallIcon} />}
-          background="white"
+          icon={<LayoutTextSidebarReverse color={menuSize.color} size={menuSize.smallIcon} />}
+          background={menuSize.background}
           size={menuSize.smallMenu}
           onClick={() => {navigate("/data"); setIsOpen(false);}}
         />
         <ChildButton
-          icon={<Table color="royalblue" size={menuSize.smallIcon} />}
-          background="white"
+          icon={<Table color={menuSize.color} size={menuSize.smallIcon} />}
+          background={menuSize.background}
           size={menuSize.smallMenu}
           onClick={() => {navigate("/table"); setIsOpen(false);}}
         />
         <ChildButton
-          icon={<ArrowClockwise color="royalblue" size={menuSize.smallIcon} />}
-          background="white"
+          icon={<ArrowClockwise color={menuSize.color} size={menuSize.smallIcon} />}
+          background={menuSize.background}
           size={menuSize.smallMenu}
           onClick={() => {window.location.reload(); setIsOpen(false);}}
         />
         <ChildButton
-              icon={<p style={{color: "royalblue"}}>v{creds.version}</p>}
-              background="white"
-              size={menuSize.smallMenu}
-              onClick={() => {window.location.href = "https://sev.rotexvysocina.cz"; setIsOpen(false);}}
-              />
+          icon={<p style={{color: menuSize.color}}>v{creds.version}</p>}
+          background={menuSize.background}
+          size={menuSize.smallMenu}
+          onClick={() => {window.location.href = "https://sev.rotexvysocina.cz"; setIsOpen(false);}}
+          />
     </FloatingMenu>
     </div>
   );

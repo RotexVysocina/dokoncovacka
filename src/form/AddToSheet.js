@@ -97,10 +97,16 @@ const AddToSheet = ({ onClear,
       return;
     }
 
-    showAlert("success", "Přidáno");
+    showAlert("success", "Přidáno znovu");
     console.log("Added:")
     console.log(added);
+    // onClear();
+  }
+
+  const addDbRowClear = async () => {
+    await addDbRow();
     onClear();
+    showAlert("success", "Přidáno");
   }
 
   // Revert ////////////////////////////////////////////////////
@@ -158,18 +164,20 @@ const AddToSheet = ({ onClear,
       <style type="text/css">
       {`  
       .btn-xxl {
-        padding: 0.9rem 1rem;
-        font-size: 1.8rem;
+        padding: 0.8rem 0.9rem;
+        font-size: 1.4rem;
       }
       `}
       </style>
-      <Button size="xxl" variant="info" onClick={loadLastRow}>Poslední</Button>
-      {' '}
+      {/*<Button size="xxl" variant="info" onClick={loadLastRow}>Poslední</Button>*/}
+      {/*{' '}*/}
       <Button size="xxl" variant="danger" onClick={onBackClick}>Zpět</Button>
       {' '}
       <Button size="xxl" variant="warning" onClick={onClear}>Vyčistit</Button>
       {' '}
-      <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
+      <Button size="xxl" variant="success" onClick={addDbRowClear}>Přidat</Button>
+      {' '}
+      <Button size="xxl" variant="light" onClick={addDbRow}>Přidat-znovu</Button>
       <ModalDialog show={modalRevShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalRevShow(false)} handleAccept={modalRevertAccept}/>
     </div>
   );

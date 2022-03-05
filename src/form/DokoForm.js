@@ -94,7 +94,6 @@ function DokoForm() {
   /////////////////// Select SIZE
   const onSelectSize = useCallback((selectedSize) => {
     setValueSize("");
-    setValueType("");
     console.log("Velikost:", selectedSize);
     setValueSize(selectedSize.label);
   }, []);
