@@ -24,7 +24,6 @@ const AddToSheet = ({ onClear,
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [modalRevShow, setModalRevShow] = useState(false);
-  const [modalAddShow, setModalAddShow] = useState(false);
 
   const gSheetInit = async () => {
     try {
@@ -105,17 +104,34 @@ const AddToSheet = ({ onClear,
   }
 
   // Revert ////////////////////////////////////////////////////
+  const loadLastRow = async () => {
+    let dbRm;
+    let len;
+    try {
+      await gSheetInit();
+      dbRm = await getSheetByName("db");
+
+      len = dbRm.length;
+      console.log(dbRm[len-1]);
+      const dbRow = dbRm[len-1];
+      onBack(dbRow);
+      return dbRm;
+    } catch (e) {
+      showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
+      return false;
+    }
+  }
+
   const revertLastRow = async () => {
-    await gSheetInit();
-    const dbRm = await getSheetByName("db");
-
-    const len = dbRm.length;
-    console.log(dbRm[len-1]);
-    const dbRow = dbRm[len-1];
-    onBack(dbRow);
-
-    await dbRm[len-1].delete();
-
+    const dbRm = await loadLastRow();
+    if(dbRm) {
+      try {
+        await dbRm[dbRm.length-1].delete();
+      } catch (e) {
+        showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
+        return;
+      }
+    }
     showAlert("success", "Vráceno");
   }
 
@@ -123,14 +139,13 @@ const AddToSheet = ({ onClear,
     setModalRevShow(true);
   }
 
-  const modalAccept = async () => {
+  const modalRevertAccept = async () => {
     setModalRevShow(false);
     try {
       await revertLastRow();
     } catch (e) {
       showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(`, false);
     }
-
   }
 
   return (
@@ -148,13 +163,14 @@ const AddToSheet = ({ onClear,
       }
       `}
       </style>
+      <Button size="xxl" variant="info" onClick={loadLastRow}>Poslední</Button>
+      {' '}
       <Button size="xxl" variant="danger" onClick={onBackClick}>Zpět</Button>
       {' '}
       <Button size="xxl" variant="warning" onClick={onClear}>Vyčistit</Button>
       {' '}
       <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
-      <ModalDialog show={modalRevShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalRevShow(false)} handleAccept={modalAccept}/>
-      <ModalDialog show={modalAddShow} modalHeading="Přidáno" modalContent="Tohle všechno bylo přidáno" handleClose={() => setModalAddShow(false)} footer={false}/>
+      <ModalDialog show={modalRevShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalRevShow(false)} handleAccept={modalRevertAccept}/>
     </div>
   );
 };
