@@ -59,6 +59,7 @@ const AddToSheet = ({ onClear,
     }
   }
 
+  // Add ////////////////////////////////////////////////////
   const addDbRow = async () => {
     const newRow = {
         "Firma": catalog,
@@ -81,11 +82,10 @@ const AddToSheet = ({ onClear,
       }
     }
     let added;
-    let dbAdd
+    let dbAdd;
     try {
       await gSheetInit()
       dbAdd = doc.sheetsByTitle["db"];
-      added = dbAdd.addRow(newRow);
     } catch (e) {
       showAlert("danger", `ERROR: Problém s tabulkou - asi nejede internet :-(==`, false);
       return;
@@ -104,21 +104,22 @@ const AddToSheet = ({ onClear,
     onClear();
   }
 
+  // Revert ////////////////////////////////////////////////////
   const revertLastRow = async () => {
     await gSheetInit();
     const dbRm = await getSheetByName("db");
 
-    showAlert("success", "Vráceno");
     const len = dbRm.length;
     console.log(dbRm[len-1]);
     const dbRow = dbRm[len-1];
-
     onBack(dbRow);
 
     await dbRm[len-1].delete();
+
+    showAlert("success", "Vráceno");
   }
 
-  const onBackClick = async (row) => {
+  const onBackClick = async () => {
     setModalRevShow(true);
   }
 
@@ -153,7 +154,7 @@ const AddToSheet = ({ onClear,
       {' '}
       <Button size="xxl" variant="success" onClick={addDbRow}>Přidat</Button>
       <ModalDialog show={modalRevShow} modalHeading="Zpět" modalContent="Opravdu si přejete vrátit poslední zadání?" handleClose={() => setModalRevShow(false)} handleAccept={modalAccept}/>
-      {/*<ModalDialog show={modalAddShow} modalHeading="Zpět" modalContent="Přidíáno" handleClose={() => setModalAddShow(false)} handleAccept={modalAccept}/>*/}
+      <ModalDialog show={modalAddShow} modalHeading="Přidáno" modalContent="Tohle všechno bylo přidáno" handleClose={() => setModalAddShow(false)} footer={false}/>
     </div>
   );
 };

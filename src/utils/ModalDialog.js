@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Modal} from 'react-bootstrap'
 
-function ModalDialog({ show, modalHeading, modalContent, handleAccept, handleClose}) {
+function ModalDialog({ show, modalHeading, modalContent, handleAccept, handleClose, footer = true}) {
 
   return(
     <>
@@ -15,7 +15,7 @@ function ModalDialog({ show, modalHeading, modalContent, handleAccept, handleClo
           <Modal.Title style={{fontSize: 30}}>{modalHeading}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{fontSize: 25}}>{modalContent}</Modal.Body>
-        <Modal.Footer>
+        {footer && <Modal.Footer>
           <Button size="xxl" variant="secondary" onClick={handleClose}>
             Zavřít
           </Button>
@@ -23,6 +23,8 @@ function ModalDialog({ show, modalHeading, modalContent, handleAccept, handleClo
             Potvrtdit
           </Button>
         </Modal.Footer>
+        }
+
       </Modal>
     </>
   )
