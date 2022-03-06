@@ -3,11 +3,13 @@ import {HouseFill, List, Table, ArrowClockwise, LayoutTextSidebarReverse, PcDisp
 import React, {useState} from "react";
 import { Route, Routes, Navigate, useNavigate} from "react-router-dom";
 import creds from "../cred/rotex-339816-80d534ff0b05.json";
+import ModalDialogSelect from "../utils/ModalDialogSelect";
 
 function FloatingAppMenu() {
 
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [modalReloadShow, setModalReloadShow] = useState(false);
 
   let menuSize = {
     bigMenu: 80,
@@ -65,15 +67,24 @@ function FloatingAppMenu() {
           icon={<ArrowClockwise color={menuSize.color} size={menuSize.smallIcon} />}
           background={menuSize.background}
           size={menuSize.smallMenu}
-          onClick={() => {window.location.reload(); setIsOpen(false);}}
+          onClick={() => {window.location.reload(true); setIsOpen(false);}}
         />
         <ChildButton
           icon={<p style={{color: menuSize.color}}>v{version()}</p>}
           background={menuSize.background}
           size={menuSize.smallMenu}
-          onClick={() => {window.location.href = "https://sev.rotexvysocina.cz"; setIsOpen(false);}}
+          onClick={() => {setModalReloadShow(true); setIsOpen(false);}}
           />
-    </FloatingMenu>
+      </FloatingMenu>
+      <ModalDialogSelect
+        show={modalReloadShow}
+        modalHeading="Změna verze"
+        modalContent="Vyber verzi"
+        handleClose={() => setModalReloadShow(false)}
+        answerA="Aktuállní verze (ev)"
+        handleAnswerA={() =>{window.location.href = "https://ev.rotexvysocina.cz"; setModalReloadShow(false);}}
+        answerB="Starší verze (sev)"
+        handleAnswerB={() =>{window.location.href = "https://sev.rotexvysocina.cz"; setModalReloadShow(false);}}/>
     </div>
   );
 }
